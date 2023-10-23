@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <!-- 부트스트랩 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+
+    <!-- 구글폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/board.css">
+
+    <style>
+        .mypage{
+            font-weight: 800;
+
+        }
+
+        .mypage>img{
+            border : 2px solid gray;
+        }
+
+        main>.update{
+            margin-top : 50px;
+            margin-bottom : 50px;
+            margin-right : 100px;
+        }
+
+        main>.update>h2{
+            margin-bottom : 40px;
+        }
+
+        main>.update>.update-img{
+            display : flex;
+            height : 150px;
+            align-items: center;
+            border-bottom : 1px solid rgb(188, 188, 188);
+            margin-bottom : 50px;
+            padding-bottom : 50px;
+        }
+
+        main>.update>.update-img>.profileimg{
+            margin-right : 30px;
+        }
+
+        .mb-3{
+            margin-top : 20px;
+        }
+
+        .img-ok{
+            font-size: 0.8rem;
+        }
+
+        .out{
+            margin-top : 50px;
+            padding-top : 50px;
+            border-top : 1px solid rgb(188, 188, 188);
+        }
+
+    </style>
+</head>
+<body class="scroll">
+
+<header>
+    <div class="menu">
+        <div class="top-menu">
+
+            <div class="logo">
+                <a href="/list"> <img src="/images/logo.png" max-width="100%" height="15"/> </a>
+            </div>
+
+            <div class="middle-menu">
+                <a href="/list">
+                    <div class="home">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+                            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
+                        </svg>홈
+                    </div>
+                </a>
+
+                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                    검색
+                </button>
+
+                <a href="#" id="notification-icon">
+                    <div class="message">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                            <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                        </svg>메시지
+                    </div>
+                </a>
+
+                <button type="button" class="btn btn-primary position-relative bell" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+                        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                    </svg>알림
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        99+
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </button>
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>글쓰기
+                </button>
+
+                <a href="/mypage">
+                    <div class="mypage">
+                        <img th:src="${#authentication.getPrincipal().getUser().getProfile()}" style="width:22px;height:22px;border-radius:50%;" />프로필
+                    </div>
+                </a>
+            </div>
+        </div>
+
+
+
+        <div class="logout">
+            <form method="post" action="/logout">
+                <button class="logout-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+                        <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+                    </svg>로그아웃
+                </button>
+            </form>
+        </div>
+
+    </div>
+</header>
+
+<!-- ------------------------------------------------------------------------------------------------------------------------------ -->
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasRightLabel">검색</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+
+        <div class="searchbox">
+            <form id="searchForm" method="GET">
+                <select class="form-select" aria-label="Default select example" id="searchOption">
+                    <option value="nickname">닉네임</option>
+                    <option value="content">내용</option>
+                </select>
+                <input type="text" name="keyword" class="form-control" id="searchKeyword">
+                <button type="submit" class="btn btn-outline-secondary" id="searchButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">알림</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div>
+            여기에 알림
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header" style="height : 40px;">
+                <span class="modal-title" id="exampleModalLabel" style="font-weight: 600;">새 게시물</span>
+            </div>
+
+            <div class="modal-body" style="display : flex; justify-content: center;">
+                <section class="product_img_block" style="display : fixed;width : 10px;">
+                    <div class="product_img">
+                        <div class="upload-box" style="position : relative;left :10px;top : 0px;width : 500px;height : 500px;z-index:999;">
+                            <div class="plus">+</div>
+                        </div>
+                    </div>
+                </section>
+                <form onsubmit="return false" name="imageform" >
+                    <div style="display : flex;">
+                        <div class="form-group" style="display : flex; flex-direction: column;">
+                            <!--                            <input class="form-control" type="file" id="fileInput" name="files" style="z-index : 80;" multiple>-->
+
+                            <div style="width : 500px; height : 500px;">
+                                <div id="preview" style="width : 500px;height : 500px;"></div>
+                            </div>
+                        </div>
+
+                        <div style="margin-left : 60px;">
+                            <div class="form-group" style="height : 49px;">
+                                <img th:src="${#authentication.getPrincipal().getUser().getProfile()}" style="width:22px;height:22px;border-radius:50%;" />
+                                <label for="nickname"></label>
+                                <input type="text" id="nickname" name="nickname" th:value="${#authentication.getPrincipal().getUser().getNickname()}" style="border : 1px solid white;"readonly/>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea name="contents" rows="4" style="width : 300px;height : 300px;" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top : 20px;">
+                        <button type="submit" class="btn btn-primary add_product_btn">등록</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+<main>
+
+    <div class="update">
+
+        <div class="update-img">
+
+            <div class="profileimg" style="display:flex;justify-content:left; align-items : center;">
+                <img th:src="${dto.profile}" style="width:70px;height:70px;border-radius:50%;" />
+            </div>
+
+            <div class="mb-3">
+                <label for="imagechange" class="form-label">프로필 사진 변경</label>
+                <input class="form-control form-control-sm" id="imagechange" type="file" name="profileImage" accept="image/*">
+            </div>
+
+        </div>
+
+
+        <form id="profileForm" >
+            <span for="emailInput" style="margin-right : 35px;">이메일</span>
+            <span sec:authentication="principal.username">abc@acb.com</span>
+            <br/>
+            <br/>
+            <span for="emailInput" style="margin-right : 18px;">비밀번호</span>
+            <a href="/leave">비밀번호 변경하기</a>
+            <br/>
+            <br/>
+            <span for="nicknameInput">사용할 닉네임</span>
+            <div style="display: flex;">
+                <input id="nicknameInput" name="newNickname" class="form-control" th:value="${dto.nickname}">
+                <button class="btn btn-secondary jung-btn" onclick="checkNicknameDuplicate('nicknameInput')" style="width : 160px; font-size: 0.8rem; margin-left : 17px;">중복체크</button>
+            </div>
+            <br/>
+            <span>성명</span>
+            <div>
+                <input class="form-control" th:value="${dto.name}" readonly>
+            </div>
+            <br/>
+
+            <span for="birthInput">생년월일</span>
+            <div>
+                <input name="newBirth" id="birthInput" autocomplete="off" class="form-control" th:value="${dto.birth}">
+            </div>
+            <br/>
+
+            <span>휴대폰</span>
+            <div>
+                <input name="newPhone" id="phoneInput" maxlength="13" class="form-control" th:value="${dto.phone}">
+            </div>
+            <br/>
+
+            <!-- <span>주소</span>
+            <div>
+                <div style="display : flex;">
+                    <input name="newZipcode" class="form-control zipcode"  th:value="${dto.zipcode}">
+                    <button class="btn btn-secondary search_addr_btn" style="width : 160px; font-size: 0.8rem; margin-left : 17px;">주소검색</button>
+                </div>
+
+                <input name="newAddr1" class="form-control addr1"  th:value="${dto.addr1}" style="width : 330px; margin-top : 5px;">
+                <input name="newAddr2" class="form-control" th:value="${dto.addr2}" style="width : 330px; margin-top : 5px;">
+            </div>
+            <br/> -->
+
+            <button type="submit" class="btn btn-secondary">제출</button>
+        </form>
+
+        <div class="out">
+            <a href="/profile/leave_auth">회원탈퇴</a>
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+    let isNicknameChecked = false;
+        // <!--닉네임 중복체크-->
+        function checkNicknameDuplicate(nicknameInput) {
+            const inputValue = $("#" + nicknameInput).val();
+            $.ajax({
+                url: "/checkNicknameDuplicate",
+                type: "POST",
+                data: {value: inputValue, field: nicknameInput},
+                success: function (response) {
+                    if (response.duplicate) {
+                          alert("이미 존재하는 닉네임입니다.");
+                          isNicknameChecked = false;
+                    } else {
+                        alert("사용 가능한 닉네임입니다.");
+                        isNicknameChecked = true;
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("오류 발생 : ", error);
+                    isNicknameChecked = false;
+                }
+            });
+        }
+
+        <!--휴대폰 번호 입력 제한-->
+        const phoneInput = document.getElementById("phoneInput");
+
+        phoneInput.addEventListener("input", function(){
+            const inputValue = phoneInput.value.replace(/\D/g, "");
+    <!--   입력시 숫자제외 입력 불가-->
+            phoneInput.value = inputValue;
+
+     if (inputValue.length >= 7) {
+            phoneInput.value =
+                inputValue.slice(0, 3) +
+                "-" +
+                inputValue.slice(3, 7) +
+                "-" +
+                inputValue.slice(7);
+        }
+
+    });
+
+        <!--    생년월일 입력 필드에 Datepicker를 적용합니다.-->
+            $(function() {
+                $("#birthInput").datepicker({
+                    dateFormat: "yy-mm-dd", // 날짜 형식 설정 (연도-월-일)
+                    changeMonth: true,      // 월 선택 가능
+                    changeYear: true,       // 연도 선택 가능
+                    yearRange: "c-100:c+10" // 년도 선택 범위 설정
+                });
+            });
+
+</script>
+
+<!--<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>-->
+<!--<script>-->
+
+<!--    const search_addr_btn = document.querySelector('.search_addr_btn');-->
+<!--    search_addr_btn.addEventListener('click',function(){-->
+<!--       new daum.Postcode({-->
+<!--                oncomplete: function(data) {-->
+<!--                    console.log(data);-->
+<!--                    const zipcode = document.querySelector('.zipcode');-->
+<!--                    const addr1 = document.querySelector('.addr1');-->
+
+<!--                    if(data.userSelectedType==='R')-->
+<!--                    {-->
+<!--                        addr1.value = data.roadAddress;-->
+<!--                    }-->
+<!--                    else-->
+<!--                    {-->
+<!--                        addr1.value = data.jibunAddress;-->
+<!--                    }-->
+<!--                    zipcode.value=data.zonecode;-->
+
+<!--                }-->
+<!--            }).open();-->
+
+<!--    });-->
+<!--</script>-->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js" integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    const fileInput = document.getElementById('imagechange');
+              fileInput.addEventListener('change', function () {
+                 const formData = new FormData();
+                 const fileInput = document.getElementById('imagechange');
+                 const file = fileInput.files[0];
+                 formData.append('file', file, file.name);
+
+                     axios.post("/user/profileimage/upload",formData,{headers: { 'Content-Type': 'multipart/form-data'} })
+                     .then(response=>{
+                         console.log(response);
+                         location.reload();
+                     })
+            });
+
+</script>
+
+<script>
+    // HTML 폼 요소를 찾아서 변수에 할당
+    const profileForm = document.getElementById('profileForm');
+
+    // 폼 제출 이벤트 리스너를 추가
+    profileForm.addEventListener('submit', function (event) {
+
+        // FormData 객체를 사용하여 폼 데이터 수집
+        const formData = new FormData(profileForm);
+
+        // Axios를 사용하여 POST 요청을 서버에 보냄
+        axios.post('/profile/update', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+            .then(response => {
+                // 성공적으로 요청이 처리된 후 실행되는 코드
+                console.log(response);
+
+    window.location.href = '/login'; // 로그인 페이지로 리디렉션
+    alert('프로필 업데이트가 성공했습니다.');
+
+            })
+            .catch(error => {
+                // 요청이 실패한 경우 실행되는 코드
+                console.error(error);
+            });
+    });
+</script>
+
+<script>
+    const formData = new FormData();	//폼관련 정보 저장
+
+const uploadBox_el = document.querySelector('.upload-box');
+//dragenter / dragover /dragleave / drop
+
+uploadBox_el.addEventListener('dragenter',function(e){
+    e.preventDefault();
+    console.log("dragenter...");
+});
+uploadBox_el.addEventListener('dragover',function(e){
+    e.preventDefault();
+    uploadBox_el.style.opacity='0.5';
+    console.log("dragover...");
+
+});
+uploadBox_el.addEventListener('dragleave',function(e){
+    e.preventDefault();
+    uploadBox_el.style.opacity='1';
+    console.log("dragleave...");
+
+});
+
+//----------------------------------------------
+//
+//----------------------------------------------
+uploadBox_el.addEventListener('drop',function(e){
+    e.preventDefault();
+    console.log("drop...");
+    console.log(e);
+    console.log(e.dataTransfer);
+    console.log(e.dataTransfer.files[0]);
+
+    //유효성체크(이미지만, 하나씩만 , 용량제한 ...)
+    // 파일 유형 확인 및 이미지 파일만 처리
+    const imageFiles = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+    if (imageFiles.length === 0) {
+            alert("이미지 파일만 가능합니다");
+            return;
+    }
+    //총이미지의 개수가 5개 이상이면 return(아직..)
+
+    //미리보기
+    const file = e.dataTransfer.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(event) {
+        const preview = document.getElementById('preview');
+        const img = document.createElement('img')
+        img.setAttribute('src',event.target.result);
+        preview.appendChild(img);
+    };
+    //formData에 저장
+    formData.append('files',file);
+
+});
+</script>
+
+</body>
+</html>

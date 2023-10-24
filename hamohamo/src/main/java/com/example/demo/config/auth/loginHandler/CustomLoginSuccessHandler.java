@@ -19,6 +19,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler{
 		
 		System.out.println("CustomLoginSuccessHandler's onAuthenticationSuccess!!!!!!!!!!!!!! ");
 		Collection<? extends GrantedAuthority> collection = authentication.getAuthorities();
+
 		
 		collection.forEach((role) -> {
 			try {
@@ -28,12 +29,6 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler{
 				{
 					System.out.println("메인 페이지로 이동");
 					response.sendRedirect(request.getContextPath()+"/list");
-					return;
-				}
-				else if(role_str.equals("ROLE_MEMBER"))
-				{
-					System.out.println("MEMBER 페이지로 이동");
-					response.sendRedirect(request.getContextPath()+"/member");
 					return;
 				}
 				else if(role_str.equals("ROLE_ADMIN"))

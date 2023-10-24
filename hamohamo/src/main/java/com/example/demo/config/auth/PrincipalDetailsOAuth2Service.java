@@ -146,8 +146,9 @@ public class PrincipalDetailsOAuth2Service extends DefaultOAuth2UserService   im
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user =  userRepository.findById(email);
 
-        if(user.isEmpty())
-            return null;
+        if(user.isEmpty()) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
 
         UserDto dto = new UserDto();
         dto.setPassword(user.get().getPassword());

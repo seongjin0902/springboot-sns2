@@ -87,7 +87,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 				.rememberMeParameter("remember-me")
 				.tokenValiditySeconds(60*60)
 				.alwaysRemember(false)
-				.tokenRepository(tokenRepository())
+//				.tokenRepository(tokenRepository())
 				.userDetailsService(principalDetailsOAuth2Service)
 
 				.and()
@@ -139,13 +139,13 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
 	//REMEMBER ME BEAN 추가
 
-	@Bean
-	public PersistentTokenRepository tokenRepository() {
-		JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
-		repo.setDataSource(dataSource);
-		//repo.setCreateTableOnStartup(true);
-		return repo;
-	}
+//	@Bean
+//	public PersistentTokenRepository tokenRepository() {
+//		JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+//		repo.setDataSource(dataSource);
+//		//repo.setCreateTableOnStartup(true);
+//		return repo;
+//	}
 
 
 

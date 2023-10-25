@@ -31,4 +31,5 @@ public class BoardDto {
         dto.like_count  = board.getLike_count();
         return dto;
     }
+    //하이
 }

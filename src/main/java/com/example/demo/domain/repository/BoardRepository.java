@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +54,6 @@ public interface BoardRepository extends JpaRepository<Board, String> {
     //해당보드를 작성한 유저의 이메일 조회
     @Query("SELECT u.email FROM User u INNER JOIN Board b ON u.email = b.email WHERE b.number=:number")
     String whoboard(@Param("number") Long number);
+
 
 }

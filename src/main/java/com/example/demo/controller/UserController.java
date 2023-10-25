@@ -8,7 +8,6 @@ import com.example.demo.domain.repository.BoardRepository;
 import com.example.demo.domain.repository.UserRepository;
 import com.example.demo.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -31,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,10 +69,10 @@ public class UserController {
 	}
 
 	//================================================================
-	@GetMapping("/checkDuplicate")
-	public void checkDuplicate_get(){
-		log.info("GET/checkDuplicate");
-	}
+//	@GetMapping("/checkDuplicate")
+//	public void checkDuplicate_get(){
+//		log.info("GET/checkDuplicate");
+//	}
 
 	@PostMapping("/checkDuplicate")
 	public ResponseEntity<Map<String, Boolean>> checkDuplicate(@RequestParam("field") String field, @RequestParam("value") String value) {
@@ -90,8 +88,8 @@ public class UserController {
 
 		return ResponseEntity.ok(response);
 	}
-	@GetMapping("/checkNicknameDuplicate")
-	public void checkNicknameDuplicate_get(){ log.info("GET/checkNicknameDuplicate");}
+//	@GetMapping("/checkNicknameDuplicate")
+//	public void checkNicknameDuplicate_get(){ log.info("GET/checkNicknameDuplicate");}
 	@PostMapping("/checkNicknameDuplicate")
 	public ResponseEntity<Map<String, Boolean>> checkNicknameDuplicate(@RequestParam ("field") String field,@RequestParam ("value") String value) {
 
@@ -105,35 +103,33 @@ public class UserController {
 
 		return ResponseEntity.ok(response);
 	}
+
+	@PostMapping("/checkPhoneDuplicate")
+	public ResponseEntity<Map<String, Boolean>> checkPhoneDuplicate(@RequestParam ("field") String field, @RequestParam ("value") String value){
+
+		boolean isDuplicate = false;
+		if("phoneInput".equals(field)){
+			isDuplicate = userRepository.existsByPhone(value);
+		}
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("duplicate", isDuplicate);
+
+		return ResponseEntity.ok(response);
+	}
 	//================================================================
 
 
 	@GetMapping("/profile/update")
 	public String showInfo(Model model) {
+		System.out.println("프로필 업데이트 겟요청입니다.");
 		// 현재 인증된 사용자의 이메일 가져오기
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 
-		// UserDto 객체 생성
-		UserDto dto = new UserDto();
-
 		// UserRepository를 사용하여 사용자 정보 가져오기
 		User user = userRepository.findByEmail(email);
 
-		// 사용자 정보에서 닉네임을 가져와서 설정
-		if (user != null) {
-			dto.setNickname(user.getNickname());
-			dto.setName(user.getName());
-			dto.setPassword(user.getPassword());
-			dto.setBirth(user.getBirth());
-			dto.setPhone(user.getPhone());
-			dto.setZipcode(user.getZipcode());
-			dto.setAddr1(user.getAddr1());
-			dto.setAddr2(user.getAddr2());
-			dto.setProfile(user.getProfile());
-		}
-
-		model.addAttribute("dto", dto);
+		model.addAttribute("dto", user);
 
 		return "profile/update";
 	}
@@ -145,34 +141,34 @@ public class UserController {
 //							 @RequestParam("newZipcode") String newZipcode,
 //							 @RequestParam("newAddr1") String newAddr1,
 //							 @RequestParam("newAddr2") String newAddr2,
-							 RedirectAttributes redirectAttributes,
-							 Model model, Authentication authentication) {
+							 RedirectAttributes redirectAttributes) {
 		System.out.println("UserUpdate POST/ post");
 
-		// Authentication 의  PrincipalDetails에 변경된 UserDto저장
-		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
 		//접속 유저명 받기
-		authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 
-
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
 		boolean isUpdate = userService.UserUpdate(email,newNickname, newBirth, newPhone);
 
-		System.out.println(authentication);
+		UserDto dto = principalDetails.getUser();
 
-
+		System.out.println("전 dto : "+dto);
+		dto.setNickname(newNickname);
+		dto.setPhone(newPhone);
+		dto.setBirth(newBirth);
+		System.out.println("후 dto : "+dto);
 
 		System.out.println("IsUpdate : "+ isUpdate);
 		if (isUpdate) {
-//			SecurityContextHolder.getContext().setAuthentication(null);
 			redirectAttributes.addFlashAttribute("successMessage", "Nickname updated successfully.");
 		} else {
 			redirectAttributes.addFlashAttribute("errorMessage", "Failed to update nickname.");
 		}
 
-		return "redirect:/login";
+		return "ok";
 	}
 
 	@GetMapping("/mypage")
@@ -193,22 +189,9 @@ public class UserController {
 
 
 	@GetMapping("/user/withdraw")
-	public String withdrawUser(Model model, Principal principal, HttpServletRequest request) {
-		String email = principal.getName(); // 현재 인증된 사용자의 이메일 가져오기
-		String password = request.getParameter("password"); // 사용자 입력에서 비밀번호 가져오기
+	public String withdrawUser() {
 
-		boolean isWithdrawn = userService.withdrawUser(email, password);
-
-		if (isWithdrawn) {
-			// 회원 탈퇴에 성공한 경우, 로그아웃 처리 및 세션 무효화
-			SecurityContextHolder.clearContext(); // 현재 사용자의 보안 컨텍스트를 지웁니다.
-
-			return "redirect:/login?message=WithdrawnSuccessfully";
-		} else {
-			// 회원 탈퇴에 실패한 경우 에러 메시지 등을 처리합니다.
-			return "redirect:/mypage?error=WithdrawFailed";
-
-		}
+		return "/profile/leave_auth";
 	}
 	@PostMapping("/user/withdraw")
 	public String withdrawUserPost(@RequestParam String password, RedirectAttributes redirectAttributes) {
@@ -254,27 +237,19 @@ public class UserController {
 
 	@GetMapping("/list/search-nickname")
 	public String search(String keyword, Model model){
-		List<User> searchList = userService.search_nickname(keyword);
+
+		// 현재 인증된 사용자의 닉네임 가져오기
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		PrincipalDetails userDetails = (PrincipalDetails) principal;
+		String nickname = userDetails.getUser().getNickname();
+
+		System.out.println("nickname"+nickname);
+
+		List<User> searchList = userService.search_nickname(keyword,nickname);
 		model.addAttribute("userList",searchList);
 		System.out.println("searchList : "+searchList);
 
-//		------------------------------------------------------------
-//		// 현재 인증된 사용자의 이메일 가져오기
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		String email = authentication.getName();
-//
-//		// UserRepository를 사용하여 사용자 정보 가져오기
-//		User user = userRepository.findById(email).get();
-//
-//		// UserDto 객체 생성
-//		UserDto dto = UserDto.EntityToDto(user);
-//		// 사용자 정보에서 닉네임을 가져와서 설정
-//		if (user != null) {
-//			dto.setNickname(user.getNickname());
-//		}
-//
-//		model.addAttribute("dto", dto);
-//		------------------------------------------------------------
 		return "search-nickname";
 	}
 
@@ -336,7 +311,7 @@ public class UserController {
 		user.setProfile("/resources/hamohamo/"+user.getEmail()+"/"+filename);
 
 		//DB에도 넣기
-		System.out.println("userDto : "+user);
+		System.out.println("user : "+user);
 		userService.updateProfile(user);
 
 
@@ -347,6 +322,31 @@ public class UserController {
 		return "ok";
 
 	}
+
+	@GetMapping("/findid")
+	public void findid() {log.info("GET/findid...");}
+	@GetMapping("/emailcheck")
+	public void emailcheck() {log.info("GET/emailcheck...");}
+	@GetMapping("/resetpw")
+	public void resetpw() {log.info("GET/resetpw...");}
+	@GetMapping("/checkNicknameDuplicate")
+	public void checkNicknameDuplicate_get(){ log.info("GET/checkNicknameDuplicate");}
+	@GetMapping("/checkDuplicate")
+	public void checkDuplicate_get(){
+		log.info("GET/checkDuplicate");
+	}
+	@GetMapping("/checkPhoneDuplicate")
+	public void checkPhoneDuplicate_get(){
+		log.info("GET/checkPhoneDuplicate");
+	}
+	@GetMapping("/sendemail")
+	public void sendemail_get() {log.info("GET/sendemail"); }
+	@GetMapping("/checkcode")
+	public void checkCode_get() {log.info("GET/checkcode"); }
+	@GetMapping("/draw")
+	public void draw_get() {log.info("GET/draw"); }
+
+
 
 
 }

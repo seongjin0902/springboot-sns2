@@ -243,11 +243,13 @@
 
       <div class="user">
         <div class="profileimg" style="display:flex;justify-content:center; align-items : center;">
-          <img th:src="${user.profile}" style="width:100px;height:100px;border-radius:50%;" />
+          <a th:href="'/nampage/' + ${user.email}" style="display:flex; align-items: center;font-size: 0.8rem;margin-right : 10px;justify-content: center; text-decoration: none; color : black;">
+            <img th:src="${user.profile}" style="width:100px;height:100px;border-radius:50%;" />
+          </a>
         </div>
         <div class="name">
           <div class = "nickname" th:text="${user.nickname}"> nickname</div>
-          <div class="email" th:test="${user.email}">email</div>
+          <div class="email" th:text="${user.email}">email</div>
         </div>
         <div class="follow">
           <button class="btn btn-secondary">팔로우</button>
@@ -333,6 +335,28 @@ window.addEventListener('scroll', toggleQuickMenu);
   });
 </script>
 
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById('searchButton').addEventListener('click', function(event) {
+      event.preventDefault(); // 기본 동작을 막습니다.
+
+      // 폼을 가져오고, action 속성을 변경한 다음 폼을 제출합니다.
+      var form = document.getElementById('searchForm');
+      var selectedOption = document.getElementById('searchOption').value; // 선택된 검색 옵션 가져오기
+      if (selectedOption === 'nickname') {
+          form.action = '/list/search-nickname'; // 닉네임 검색을 위한 URL로 변경
+      } else {
+          form.action = '/list/search-contents'; // 내용 검색을 위한 URL로 변경
+      }
+          form.submit(); // 폼 제출
+      });
+  });
+</script>
+
+<!-- axios -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
   const formData = new FormData();	//폼관련 정보 저장
 
@@ -389,24 +413,23 @@ uploadBox_el.addEventListener('drop',function(e){
   formData.append('files',file);
 
 });
-</script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById('searchButton').addEventListener('click', function(event) {
-      event.preventDefault(); // 기본 동작을 막습니다.
+const add_product_btn_el = document.querySelector('.add_product_btn');
+      add_product_btn_el.addEventListener('click',function(){
+          const contents = document.imageform.contents.value;
 
-      // 폼을 가져오고, action 속성을 변경한 다음 폼을 제출합니다.
-      var form = document.getElementById('searchForm');
-      var selectedOption = document.getElementById('searchOption').value; // 선택된 검색 옵션 가져오기
-      if (selectedOption === 'nickname') {
-          form.action = '/list/search-nickname'; // 닉네임 검색을 위한 URL로 변경
-      } else {
-          form.action = '/list/search-contents'; // 내용 검색을 위한 URL로 변경
-      }
-          form.submit(); // 폼 제출
-      });
-  });
+          formData.append('contents',contents);
+
+
+          axios.post('/post',formData,	{headers: {'Content-Type' : 'multipart/form-data' } }   )
+          .then(response =>{
+              alert("SUCCESS");
+              location.href="/list";
+          })
+          .catch(error =>{alert("FAIL");})
+
+
+      })
 </script>
 
 </body>

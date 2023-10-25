@@ -299,11 +299,11 @@
             </div>
             <br/> -->
 
-            <button type="submit" class="btn btn-secondary">제출</button>
+            <button type="submit" class="btn btn-secondary jechul">제출</button>
         </form>
 
         <div class="out">
-            <a href="/profile/leave_auth">회원탈퇴</a>
+            <a href="/user/withdraw">회원탈퇴</a>
         </div>
 
     </div>
@@ -392,7 +392,23 @@
 
 <!--    });-->
 <!--</script>-->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('searchButton').addEventListener('click', function(event) {
+        event.preventDefault(); // 기본 동작을 막습니다.
 
+        // 폼을 가져오고, action 속성을 변경한 다음 폼을 제출합니다.
+        var form = document.getElementById('searchForm');
+        var selectedOption = document.getElementById('searchOption').value; // 선택된 검색 옵션 가져오기
+        if (selectedOption === 'nickname') {
+            form.action = '/list/search-nickname'; // 닉네임 검색을 위한 URL로 변경
+        } else {
+            form.action = '/list/search-contents'; // 내용 검색을 위한 URL로 변경
+        }
+            form.submit(); // 폼 제출
+        });
+    });
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js" integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     const fileInput = document.getElementById('imagechange');
@@ -412,31 +428,21 @@
 </script>
 
 <script>
-    // HTML 폼 요소를 찾아서 변수에 할당
     const profileForm = document.getElementById('profileForm');
 
-    // 폼 제출 이벤트 리스너를 추가
-    profileForm.addEventListener('submit', function (event) {
+    const jechulButton = document.querySelector('.jechul');
 
-        // FormData 객체를 사용하여 폼 데이터 수집
+    jechulButton.addEventListener('click', function (event) {
         const formData = new FormData(profileForm);
 
-        // Axios를 사용하여 POST 요청을 서버에 보냄
         axios.post('/profile/update', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-            .then(response => {
-                // 성공적으로 요청이 처리된 후 실행되는 코드
-                console.log(response);
-
-    window.location.href = '/login'; // 로그인 페이지로 리디렉션
-    alert('프로필 업데이트가 성공했습니다.');
-
+            .then(response=>{
+            alert("수정이 완료되었습니다.");
+                location.reload();
             })
-            .catch(error => {
-                // 요청이 실패한 경우 실행되는 코드
-                console.error(error);
-            });
     });
 </script>
+
 
 <script>
     const formData = new FormData();	//폼관련 정보 저장
@@ -494,6 +500,23 @@ uploadBox_el.addEventListener('drop',function(e){
     formData.append('files',file);
 
 });
+
+const add_product_btn_el = document.querySelector('.add_product_btn');
+		add_product_btn_el.addEventListener('click',function(){
+			const contents = document.imageform.contents.value;
+
+			formData.append('contents',contents);
+
+
+			axios.post('/post',formData,	{headers: {'Content-Type' : 'multipart/form-data' } }   )
+			.then(response =>{
+				alert("SUCCESS");
+				location.href="/list";
+			})
+			.catch(error =>{alert("FAIL");})
+
+
+		})
 </script>
 
 </body>

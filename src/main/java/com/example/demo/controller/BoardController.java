@@ -63,9 +63,6 @@ public class BoardController {
 
         System.out.println("dataList : " + dataList);
 
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        System.out.println(authentication);
-
         model.addAttribute("dataList", dataList);
 
     }
@@ -153,6 +150,7 @@ public class BoardController {
     public String read(@PathVariable("number") Long number, Model model, HttpServletRequest request, HttpServletResponse response){
         System.out.println("GET /read/"+number);
         Board board = boardService.getBoardOne(number);
+        String profile = boardService.getProfileForBoard(number);
 
         System.out.println(board);
 
@@ -160,6 +158,7 @@ public class BoardController {
         System.out.println(files);
         model.addAttribute("board", board);
         model.addAttribute("files", files);
+        model.addAttribute("profile", profile);
 
         //-----------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------
@@ -233,17 +232,24 @@ public class BoardController {
 
     @GetMapping("/list/search-contents")
     public String search(String keyword, Model model){
-        List<Board> searchList = boardService.search_contents(keyword);
-        model.addAttribute("boardList",searchList);
-//-----------------------------------------------------------------------------------
-        // 현재 인증된 사용자의 이메일 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
 
-        // UserRepository를 사용하여 사용자 정보 가져오기
-        User user = userRepository.findById(email).get();
+        List<Object[]> searchList = boardService.search_contents(keyword);
+        List<Map<String, Object>> dataList = new ArrayList<>();
 
-//--------------------------------------------------------------------------------------
+        for (Object[] row : searchList) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("board", row[0]); // 여기에서 row[0]는 Board 객체
+            data.put("profile", row[1]); // 여기에서 row[1]은 profile 문자열
+
+            System.out.println(data);
+
+            dataList.add(data);
+        }
+
+        System.out.println("dataList : "+ dataList);
+
+        model.addAttribute("boardList",dataList);
+
         return "search-contents";
     }
 
@@ -277,6 +283,71 @@ public class BoardController {
     {
         boardService.thumbsDown(rnumber);
         return "redirect:/read/"+bno;
+    }
+
+    //보드number로 내페이지 구분
+    @GetMapping(value ="/whopage/{number}")
+    public String whopage(@PathVariable("number") Long number){
+
+        String boardEmail = boardService.whopageS(number);
+
+        // 현재 인증된 사용자의 이메일 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        if(email.equals(boardEmail)){
+            return "redirect:/mypage";
+        }else if(!email.equals(boardEmail)){
+            return "redirect:/nampage?boardEmail=" + boardEmail;
+        }
+
+
+        return null;
+    }
+
+    @GetMapping("/nampage")
+    public String nampage(@RequestParam(value = "boardEmail") String boardEmail, Model model) {
+        if (boardEmail != null) {
+            System.out.println("남페이지 겟매핑 남의이메일 : " + boardEmail);
+
+            //유저정보 조회
+            User user = userRepository.findByEmail(boardEmail);
+
+            //보드정보 조회
+            List<Board> namBoards = boardRepository.getBoardByEmailOrderByDateDesc(boardEmail);
+
+            System.out.println("남에 보드정보 : "+ namBoards);
+
+            //남의 게시물 정보 보내기
+            model.addAttribute("namBoards", namBoards);
+
+            //남의 유저 정보 보내기
+            model.addAttribute("namUser", user);
+        }
+        return "nampage";
+    }
+
+    //좀 겹치지만 남에페이지로 가는 또다른 메서드...
+    @GetMapping("/nampage/{email}")
+    public String nampage2(@PathVariable (value = "email") String email, Model model) {
+        if (email != null) {
+            System.out.println("남페이지 겟매핑 남의이메일 : " + email);
+
+            //유저정보 조회
+            User user = userRepository.findByEmail(email);
+
+            //보드정보 조회
+            List<Board> namBoards = boardRepository.getBoardByEmailOrderByDateDesc(email);
+
+            System.out.println("남에 보드정보 : "+ namBoards);
+
+            //남의 게시물 정보 보내기
+            model.addAttribute("namBoards", namBoards);
+
+            //남의 유저 정보 보내기
+            model.addAttribute("namUser", user);
+        }
+        return "nampage";
     }
 
 

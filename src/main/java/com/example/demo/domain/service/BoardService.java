@@ -10,7 +10,6 @@ import com.example.demo.domain.entity.User;
 import com.example.demo.domain.repository.BoardRepository;
 import com.example.demo.domain.repository.HeartRepository;
 import com.example.demo.domain.repository.ReplyRepository;
-import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -108,6 +107,11 @@ public class BoardService {
             return optionalBoard.get();
         }
         return null;
+    }
+
+    @Transactional(rollbackFor = SQLException.class)
+    public String getProfileForBoard(Long number) {
+        return boardRepository.findByNumProfile(number);
     }
 
     @Transactional(rollbackFor = SQLException.class)
@@ -241,10 +245,15 @@ public class BoardService {
     }
 
     @Transactional(rollbackFor = SQLException.class)
-    public List<Board> search_contents(String keyword){
-        List<Board> boardList = boardRepository.findByContents(keyword);
-        return boardList;
+    public List<Object[]> search_contents(String keyword){
+
+        return boardRepository.findByContents(keyword);
     }
+
+//    public String search_contents_profile(){
+//        String profile = boardRepository.findProfile();
+//        return profile;
+//    }
 
     public boolean addLike(User user, Board board) {
         System.out.println("[보드서비스]에드라이크 호출완료했슴다");
@@ -282,6 +291,13 @@ public class BoardService {
     //    로그인한 사용자가 해당 글에 하트를 눌렀는지 확인 하기 위한 메서드(true/false)
     public boolean hasUserLikedPost(User user, Board board) {
         return heartRepository.existsByUserAndBoard(user, board);
+    }
+
+    public String whopageS(Long number){
+
+        String boardEmail = boardRepository.whoboard(number);
+
+        return boardEmail;
     }
 
 }

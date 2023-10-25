@@ -175,7 +175,7 @@
                 <form onsubmit="return false" name="imageform" >
                     <div style="display : flex;">
                         <div class="form-group" style="display : flex; flex-direction: column;">
-<!--                            <input class="form-control" type="file" id="fileInput" name="files" style="z-index : 80;" multiple>-->
+                            <!--                            <input class="form-control" type="file" id="fileInput" name="files" style="z-index : 80;" multiple>-->
 
                             <div style="width : 500px; height : 500px;">
                                 <div id="preview" style="width : 500px;height : 500px;"></div>
@@ -223,8 +223,10 @@
 
                     <div class="idbox">
                         <div>
-                            <img th:src="${data.profile}" style="width:30px;height:30px;border-radius:50%;" />
-                            <div id = board_id th:text="${data.board.nickname}">id</div>|
+                            <a th:href="'/whopage/' + ${data.board.number}" style="display:flex; align-items: center;font-size: 0.8rem;margin-right : 10px;justify-content: center; text-decoration: none; color : black;">
+                                <img th:src="${data.profile}" style="width:30px;height:30px;border-radius:50%;margin-right : 10px;" />
+                                <div id = board_id th:text="${data.board.nickname}">id</div>
+                            </a>|
                             <div class="date" th:text="${data.board.date}">date</div>
                         </div>
                         <div class="hits-box">조회
@@ -237,6 +239,7 @@
                         <div id = board_img>
                             <div class="img">
                                 <img th:src="@{'/resources/hamohamo/'+${data.board.email}+'/'+${data.board.number}+'/'+${data.board.files.get(0)}}" width="450" height="100%"/>
+                                <p style="background-color : gray; opacity: 0.75; width : 50px;height : 23px;border-radius : 20px;position : relative;right : 50px; bottom : 220px;color : white;font-size : 0.8rem;"><span style="font-size : 0.8rem;">&nbsp;&nbsp;1</span>/<span th:text="${#lists.size(data.board.files)}" style="font-size : 0.8rem;"></span><span style="font-size : 0.8rem;">&nbsp;&nbsp;</span></p>
                             </div>
                             <div id=board_contents class="contents" th:text="${data.board.contents}">contents</div>
                         </div>

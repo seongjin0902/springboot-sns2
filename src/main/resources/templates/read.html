@@ -203,8 +203,10 @@
 
           <div class="idbox" style="width : 585px;">
             <div>
-              <img th:src="${#authentication.getPrincipal().getUser().getProfile()}" style="width:30px;height:30px;border-radius:50%;" />
-              <div id = board_id th:text="${board.nickname}">id</div>|
+              <a th:href="'/whopage/' + ${board.number}" style="display:flex; align-items: center;font-size: 0.8rem;margin-right : 10px;justify-content: center; text-decoration: none; color : black;">
+                <img th:src="${profile}" style="width:30px;height:30px;border-radius:50%;margin-right : 10px;" />
+                <div id = board_id th:text="${board.nickname}">id</div>
+              </a>|
               <div class="date" th:text="${board.date}">date</div>
             </div>
             <div class="hits-box">조회
@@ -227,7 +229,7 @@
                       <div class="carousel-item" th:classappend="${status.index == 0} ? active">
                         <img th:src="@{'/resources/hamohamo/' + ${board.email} + '/' + ${board.number} + '/' + ${file}}" width="585" height="650" />
                         <div class="carousel-caption">
-                          <p style="background-color : gray; opacity: 0.75; width : 50px;height : 30px;border-radius : 20px;position : relative;bottom : 550px;left : 430px;"><span th:text="${status.index + 1}"></span>/<span th:text="${#lists.size(files)}"></span></p>
+                          <p style="background-color : gray; opacity: 0.75; width : 50px;height : 27px;border-radius : 20px;position : relative;bottom : 550px;left : 430px;"><span th:text="${status.index + 1}"></span>/<span th:text="${#lists.size(files)}"></span></p>
                         </div>
                       </div>
                     </th:block>
@@ -735,6 +737,9 @@ reply_btn_el.addEventListener('click', function () {
   });
 </script>
 
+<!-- axios -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
   const formData = new FormData();	//폼관련 정보 저장
 
@@ -791,6 +796,23 @@ uploadBox_el.addEventListener('drop',function(e){
   formData.append('files',file);
 
 });
+
+const add_product_btn_el = document.querySelector('.add_product_btn');
+      add_product_btn_el.addEventListener('click',function(){
+          const contents = document.imageform.contents.value;
+
+          formData.append('contents',contents);
+
+
+          axios.post('/post',formData,	{headers: {'Content-Type' : 'multipart/form-data' } }   )
+          .then(response =>{
+              alert("SUCCESS");
+              location.href="/list";
+          })
+          .catch(error =>{alert("FAIL");})
+
+
+      })
 </script>
 
 </body>

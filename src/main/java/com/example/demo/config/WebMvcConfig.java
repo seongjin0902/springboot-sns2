@@ -17,6 +17,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private BoardRepository boardRepository;
+    //gkdl
 
 
 

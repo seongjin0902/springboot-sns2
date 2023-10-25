@@ -6,6 +6,7 @@ import com.example.demo.domain.dto.UserDto;
 import com.example.demo.domain.entity.Board;
 import com.example.demo.domain.entity.User;
 import com.example.demo.domain.repository.BoardRepository;
+import com.example.demo.domain.repository.ReplyRepository;
 import com.example.demo.domain.repository.UserRepository;
 import com.example.demo.domain.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,9 @@ public class BoardController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ReplyRepository replyRepository;
 
 
     @GetMapping("/list")
@@ -349,6 +353,8 @@ public class BoardController {
         }
         return "nampage";
     }
+
+
 
 
 }

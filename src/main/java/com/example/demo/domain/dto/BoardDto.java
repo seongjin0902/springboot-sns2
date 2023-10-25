@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class BoardDto {
@@ -19,6 +21,7 @@ public class BoardDto {
     private Long hits;
     private Long like_count;
     private MultipartFile[] files;
+
 
     public static BoardDto Of(Board board) {
         BoardDto dto = new BoardDto();

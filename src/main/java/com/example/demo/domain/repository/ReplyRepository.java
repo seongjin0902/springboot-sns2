@@ -18,5 +18,8 @@ public interface ReplyRepository extends JpaRepository<Reply,Long> {
     @Query("SELECT COUNT(r) FROM Reply r WHERE bno = :bno")
     Long GetReplyCountByBnoDesc(@Param("bno") Long bno);
 
+    @Query("SELECT COUNT(r) FROM Reply r WHERE r.board.number = :bno AND r.content IS NOT NULL")
+    Long GetReplyContentCountByBno(@Param("bno") Long bno);
+
 
 }

@@ -224,8 +224,9 @@ public class BoardService {
 
     public Long getReplyCount(Long bno) {
         return replyRepository.GetReplyCountByBnoDesc(bno);
-
     }
+
+
 
 
     public void deleteReply(Long rnunmber) {

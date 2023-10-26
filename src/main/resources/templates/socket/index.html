@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--  socketJS    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js" integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+<body>
+
+
+<div>
+    <input id="message" type="text" placeholder="Type a message..." />
+    <button id="send">Send</button>
+</div>
+<div id="chat">
+    <!-- Chat messages will be displayed here -->
+</div>
+
+    <script th:inline="javascript">
+
+        //소켓연결
+        var socket = new WebSocket('ws://localhost:8080/socket');
+
+        //메세지 수신
+        socket.onmessage = function(event) {
+            var message = event.data;
+            console.log('message : ',message);
+            document.getElementById('chat').innerHTML += '<p>' + message + '</p>';
+        };
+        //소켓 진입시
+        socket.onopen=function(event){
+            console.log("Message Recv",event.data);
+        }
+        //
+        socket.onclose = function(event){
+
+        }
+
+        //메시지 송신
+        document.getElementById('send').onclick = function() {
+            var message = document.getElementById('message').value;
+            console.log("send btn click... : ",message);
+            socket.send(message);
+            document.getElementById('message').value = '';
+        };
+
+    </script>
+
+
+</body>
+</html>

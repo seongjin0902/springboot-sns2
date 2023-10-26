@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,9 +26,9 @@ public class BoardNotificationController {
     @GetMapping(value = "/read",produces = MediaType.APPLICATION_JSON_VALUE)
     public  List<BoardNotification> f1(Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
-        String writeusername = principalDetails.getUsername();
-        System.out.println("writeusername : " + writeusername);
-        List<BoardNotification> list =  notificationRepository.findAllByWriteusername(writeusername);
+        String writenickname = principalDetails.getNickname();
+        System.out.println("writenickname : " + writenickname);
+        List<BoardNotification> list =  notificationRepository.findAllByWritenickname(writenickname);
 
         //읽음 처리
         for(BoardNotification boardNotification : list) {
@@ -42,12 +43,13 @@ public class BoardNotificationController {
     public boolean isexist(Authentication authentication)
     {
         PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
-        String writeusername = principalDetails.getUsername();
-        System.out.println("writeusername : " + writeusername);
-        List<BoardNotification> list =  notificationRepository.findAllByWriteusername(writeusername);
+        String writenickname = principalDetails.getNickname();
+        System.out.println("writenickname : " + writenickname);
+        List<BoardNotification> list =  notificationRepository.findAllByWritenickname(writenickname);
 
         return list.size()>0;
     }
+
 
 
 }

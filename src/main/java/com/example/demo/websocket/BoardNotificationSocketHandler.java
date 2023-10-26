@@ -41,10 +41,10 @@ public class BoardNotificationSocketHandler extends TextWebSocketHandler {
 
     }
 
-    public WebSocketSession findWebSocketSession(String username){
+    public WebSocketSession findWebSocketSession(String nickname){
 
         for(String key : CLIENTS.keySet()){
-            if(key.equals(username)){
+            if(key.equals(nickname)){
                 return CLIENTS.get(key);
             }
         }

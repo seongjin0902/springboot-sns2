@@ -23,9 +23,9 @@ public class BoardNotification {
     private Long nid;
     private Long bid;
     @Column
-    private String writeusername;
+    private String writenickname;
     @Column
-    private String replyusername;
+    private String replynickname;
     @Column
 
     private String massage;

@@ -54,8 +54,8 @@ public class ReplyAddEventListener implements ApplicationListener<ReplyEvent> {
         BoardNotification notification = new BoardNotification();
         notification.setBid(bno);
         notification.setRdate(LocalDateTime.now());
-        notification.setWriteusername(board.getNickname());
-        notification.setReplyusername(reply.getNickname());
+        notification.setWritenickname(board.getNickname());
+        notification.setReplynickname(reply.getNickname());
         notification.setMassage(reply.getContent());
         notification.setIsread(false);
         notificationRepository.save(notification);
